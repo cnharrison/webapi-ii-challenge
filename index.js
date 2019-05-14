@@ -34,3 +34,11 @@ server.post("/api/posts", (req, res) => {
       })
     );
 });
+
+server.get("/api/posts", (req, res) => {
+  db.find()
+    .then(posts => {
+      res.json(posts);
+    })
+    .catch(err => res.status(500).send(err));
+});
