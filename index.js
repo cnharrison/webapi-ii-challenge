@@ -57,6 +57,25 @@ server.get("/api/posts/:id", (req, res) => {
     .catch(err =>
       res
         .status(500)
-        .send({ error: "The post information could not be retrieved." })
+        .send({ error: "The post informanction could not be retrieved." })
     );
+});
+
+server.delete("/api/posts/:id", async (req, res) => {
+  try {
+    const userToDelete = await db.findById(req.params.id);
+    const count = await db.remove(req.params.id);
+    if (count > 0) {
+      res.status(200).json(userToDelete);
+    } else {
+      res
+        .status(404)
+        .json({ message: "The post with the specified ID does not exist." });
+    }
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "The post information could not be retrieved." });
+  }
 });
