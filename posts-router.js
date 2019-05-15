@@ -3,7 +3,7 @@ const db = require("./data/db.js");
 
 const router = express.Router()
 
-router.post("/api/posts", (req, res) => {
+router.post("/", (req, res) => {
     const { title, contents, created_at, updated_at } = req.body;
     if (!title || !contents) {
       res.status(400).json({
@@ -26,7 +26,7 @@ router.post("/api/posts", (req, res) => {
       );
   });
   
-  router.get("/api/posts", (req, res) => {
+  router.get("/", (req, res) => {
     db.find()
       .then(posts => {
         res.json(posts);
@@ -34,7 +34,7 @@ router.post("/api/posts", (req, res) => {
       .catch(err => res.status(500).send(err));
   });
   
-  router.get("/api/posts/:id", (req, res) => {
+  router.get("/:id", (req, res) => {
     const { id } = req.params;
     db.findById(id)
       .then(post => {
@@ -52,7 +52,7 @@ router.post("/api/posts", (req, res) => {
       );
   });
   
-  router.delete("/api/posts/:id", async (req, res) => {
+  router.delete("/:id", async (req, res) => {
     try {
       const postToDelete = await db.findById(req.params.id);
       const count = await db.remove(req.params.id);
@@ -71,7 +71,7 @@ router.post("/api/posts", (req, res) => {
     }
   });
   
-  router.put("/api/posts/:id", async (req, res) => {
+  router.put("/:id", async (req, res) => {
     const { title, contents } = req.body;
     if (!title || !contents) {
       res.status(400).json({
@@ -90,4 +90,4 @@ router.post("/api/posts", (req, res) => {
     }
   });
 
-module.export = router; 
+module.exports = router; 
