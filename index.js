@@ -63,10 +63,10 @@ server.get("/api/posts/:id", (req, res) => {
 
 server.delete("/api/posts/:id", async (req, res) => {
   try {
-    const userToDelete = await db.findById(req.params.id);
+    const postToDelete = await db.findById(req.params.id);
     const count = await db.remove(req.params.id);
     if (count > 0) {
-      res.status(200).json(userToDelete);
+      res.status(200).json(postToDelete);
     } else {
       res
         .status(404)
@@ -77,5 +77,24 @@ server.delete("/api/posts/:id", async (req, res) => {
     res
       .status(500)
       .json({ error: "The post information could not be retrieved." });
+  }
+});
+
+server.put("/api/posts/:id", async (req, res) => {
+  const { title, contents } = req.body;
+  if (!title || !contents) {
+    res.status(400).json({
+      errorMessage: "Please provide title and contents for the post."
+    });
+  }
+  try {
+    const count = await db.update(req.params.id, req.body);
+    if (count === 1) {
+      res.status(200).json(req.body);
+    }
+  } catch {
+    res
+      .status(404)
+      .json({ error: "The post information could not be modified." });
   }
 });
